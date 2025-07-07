@@ -9,5 +9,3 @@ pip install -r requirements.txt
 ```
 
 Make sure you add your API keys into the```./config.yaml``` file.
-
-
