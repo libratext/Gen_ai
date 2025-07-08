@@ -68,7 +68,7 @@ def evaluate_model(human_file_path, ai_file_path, output_file_path):
     return precision, recall, f1
 
 human_file_path = './datasets/human-micpro_original-fake_papers_train_part_public_extended.json'
-ai_file_path = './datasets/kaggle_dataset_preprocess/gen-micro_retracted-fake_papers_train_part_public_extended.json'
+ai_file_path = './datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json'
 output_file_path = './results/Binoculars/falcon-rw-1b_Binoculars_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
 precision, recall, f1 = evaluate_model(human_file_path, ai_file_path, output_file_path)

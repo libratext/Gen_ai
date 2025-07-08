@@ -72,15 +72,15 @@ def calculate_sentence_common(sentence1, sentence2):
 # with open('../rewrite_arxiv_human_inv.json', 'r') as f:
 #     data_human = json.load(f)
 
-with open('text-davinci-002_rewrite_arxiv_GPT_inv.json', 'r') as f:  
+with open('./results/Raidar/rewrite_arxiv_GPT_inv.json', 'r') as f:  
     data_gpt4 = json.load(f)
-with open('text-davinci-002_rewrite_arxiv_human_inv.json', 'r') as f:  # TODO: ideally 70b?
+with open('./results/Raidar/rewrite_arxiv_human_inv.json', 'r') as f:  # TODO: ideally 70b?
     data_human = json.load(f)
 
-with open('llama_rewrite_arxiv_GPT_inv.json', 'r') as f:  
-    data_gpt4 = json.load(f)
-with open('llama_rewrite_arxiv_human_inv.json', 'r') as f:  # TODO: ideally 70b?
-    data_human = json.load(f)
+#with open('llama_rewrite_arxiv_GPT_inv.json', 'r') as f:  
+#    data_gpt4 = json.load(f)
+#with open('llama_rewrite_arxiv_human_inv.json', 'r') as f:  # TODO: ideally 70b?
+#    data_human = json.load(f)
 
 ngram_num = 4
 def sum_for_list(a,b):

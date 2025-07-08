@@ -88,7 +88,7 @@ def evaluate_model(human_file_path, generated_file_path, output_predictions_path
     return precision, recall, f1
 
 human_file_path = './datasets/human-micpro_original-fake_papers_train_part_public_extended.json'
-generated_file_path = './datasets/kaggle_dataset_preprocess/human-micpro_original-fake_papers_train_part_public_extended.json'
+generated_file_path = './datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json'
 output_predictions_path = './results/DetectGPT/kaggle_predictions_output.json'
 output_metrics_path = './results/DetectGPT/kaggle_evaluation_metrics.json'
 
