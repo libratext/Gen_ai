@@ -7,5 +7,22 @@ Make sure you install all the requirements by typing:
 ```
 pip install -r requirements.txt
 ```
+Make sure you add your API keys into the ```./config.yaml``` file.
 
-Make sure you add your API keys into the```./config.yaml``` file.
+### Raidar Usage
+First Raidar rewrites the human or generated text using this command:
+
+```
+python ./architectures/RaidarLLMDetect-main/Arxiv/gen_arxiv_rewrite.py
+```
+This should take a few minutes to a few hours. You should get two new json file in ```./results/Raidar``` folder. 
+
+### Binoculars Usage
+
+### DetectGPT Usage
+
+### fast-DetectGPT Usage
+
+### Mosaic Usage
+
+# Results

@@ -2,7 +2,15 @@ import os
 import openai
 import json
 
-openai.api_key='KEY'
+import yaml 
+
+with open('./config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
+
+openai_api_key = config['api_keys']['openai']
+openai.api_key = openai_api_key
+
+#openai.api_key='KEY'
 
 from tenacity import (
     retry,
@@ -38,10 +46,10 @@ prompt_list = ['Revise this with your best effort', 'Help me polish this', 'Rewr
                 'Make this fluent while doing minimal change', 'Refine this for me please', 'Concise this for me and keep all the information',
                 'Improve this in GPT way']
 
-with open(f'/Gen_ai/datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json', 'r') as file:
+with open(f'./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json', 'r') as file:
     human = json.load(file)
 
-with open(f'/Gen_ai/datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json', 'r') as file:
+with open(f'./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json', 'r') as file:
     GPT = json.load(file)
 
 
@@ -62,11 +70,11 @@ def rewrite_json(input_json, prompt_list, human=False):
     return all_data
 
 human_rewrite = rewrite_json(human, prompt_list, True)
-with open(f'/Gen_ai/architectures/RaidarLLMDetect-main/RaidarLLMDetect-main/rewrite_arxiv_human_inv.json', 'w') as file:
+with open(f'./results/Raidar/rewrite_arxiv_human_inv.json', 'w') as file:
     json.dump(human_rewrite, file, indent=4)
 
 GPT_rewrite = rewrite_json(GPT, prompt_list)
-with open(f'/Gen_ai/architectures/RaidarLLMDetect-main/RaidarLLMDetect-main/rewrite_arxiv_GPT_inv.json', 'w') as file:
+with open(f'./results/Raidar/rewrite_arxiv_GPT_inv.json', 'w') as file:
     json.dump(GPT_rewrite, file, indent=4)
 
 
