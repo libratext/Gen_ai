@@ -53,28 +53,28 @@ with open(f'./datasets/gen-micro_retracted-fake_papers_train_part_public_extende
     GPT = json.load(file)
 
 
-def rewrite_json(input_json, prompt_list, human=False):
+def rewrite_json(input_json, prompt_list, human=False, output_filename='Raidar_output.json'):
     all_data = []
-    for cc, data in enumerate(input_json):
-        tmp_dict ={}
-        
-        tmp_dict['input'] = data['abs']
 
-        for ep in prompt_list:
-            tmp_dict[ep] = GPT_self_prompt(ep, tmp_dict['input'])
-        
-        all_data.append(tmp_dict)
+    with open(output_filename, 'w') as file:
+        for cc, data in enumerate(input_json):
+            tmp_dict ={}
 
-        if debug:
-            break
+            tmp_dict['input'] = data['abs']
+
+            for ep in prompt_list:
+                tmp_dict[ep] = GPT_self_prompt(ep, tmp_dict['input'])
+
+            all_data.append(tmp_dict)
+            
+            json.dump(all_data, file, indent=4)
+            file.write('\n')
+
+            if debug:
+                break
+
     return all_data
 
-human_rewrite = rewrite_json(human, prompt_list, True)
-with open(f'./results/Raidar/rewrite_arxiv_human_inv.json', 'w') as file:
-    json.dump(human_rewrite, file, indent=4)
+human_rewrite = rewrite_json(human, prompt_list, True, './results/Raidar/rewrite_arxiv_human_inv.json')
 
-GPT_rewrite = rewrite_json(GPT, prompt_list)
-with open(f'./results/Raidar/rewrite_arxiv_GPT_inv.json', 'w') as file:
-    json.dump(GPT_rewrite, file, indent=4)
-
-
+GPT_rewrite = rewrite_json(GPT, prompt_list, False, './results/Raidar/rewrite_arxiv_GPT_inv.json')
