@@ -1,0 +1,7 @@
+{
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1_score": 0.0,
+    "human_data_path": "./datasets/human-micpro_original-fake_papers_train_part_public_extended.json",
+    "generated_data_path": "./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json"
+}
