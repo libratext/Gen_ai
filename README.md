@@ -17,6 +17,11 @@ python ./architectures/RaidarLLMDetect-main/Arxiv/gen_arxiv_rewrite.py
 ```
 This should take a few minutes to a few hours. You should get two new json file in ```./results/Raidar``` folder. 
 
+And then, you apply the detection :
+```
+python ./architectures/RaidarLLMDetect-main/Arxiv/detect_arxiv_inv.py
+```
+
 ### Binoculars Usage
 To use Binoculars architecture, use this command :
 ```
@@ -44,13 +49,3 @@ To use Mosaic architecture, use this command :
 python ./architectures/MOSAIC-main/example_withmydata.py
 ```
 You should get a json file with all the predictions in ```./results/Mosaic```
-
-# Results
-
-| Architectures | Precision | Recall | F1 | Results file |
-| --- | ----------- | ----------- | ----------- | ----------- |
-| Binoculars | 0.5 | 1.0 | 0.66 | [Results](./results/Binoculars/falcon-rw-1b_Binoculars_gen_human-micro_retracted-fake_papers_train_part_public_extended.json) |
-| DetectGPT | 0 | 0 | 0 | [Results](./results/DetectGPT/kaggle_evaluation_metrics.json) |
-| fast-DetectGPT | Text | Text | Title | Title |
-| Mosaic | Text | Text | Title | Title |
-| Raidar | Text | Text | Title | Title |

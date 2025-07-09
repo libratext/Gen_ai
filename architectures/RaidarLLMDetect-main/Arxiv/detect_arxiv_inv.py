@@ -228,7 +228,7 @@ def xgboost_classifier(gpt, human, gpt_ada, gpt_davinci, gpt4, llama):
     # y_pred = model.predict(X_test)
 
     # # # Logistic regression
-    clf = LogisticRegression()
+    clf = LogisticRegression(max_iter=32000)
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test) # 66.22
 

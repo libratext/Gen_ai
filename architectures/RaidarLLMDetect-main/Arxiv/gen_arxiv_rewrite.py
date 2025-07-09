@@ -68,7 +68,7 @@ def rewrite_json(input_json, prompt_list, human=False, output_filename='Raidar_o
             all_data.append(tmp_dict)
             
             json.dump(all_data, file, indent=4)
-            file.write('\n')
+            file.write(',\n')
 
             if debug:
                 break
