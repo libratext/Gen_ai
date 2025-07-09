@@ -69,6 +69,9 @@ def evaluate_predictions(true_labels, pred_labels):
     return precision, recall, f1
 
 def run(args, human_file_path, generated_file_path, output_file_path):
+    
+    start_time = time.time()
+
     detector = FastDetectGPT(args)
     start_time = time.time()
 
@@ -129,6 +132,13 @@ def run(args, human_file_path, generated_file_path, output_file_path):
         data["running_time"] = time.time() - start_time
         file.seek(0)
         json.dump(data, file, indent=4)
+
+    running_time = time.time() - start_time
+
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1 Score: {f1}")
+    print(f"Running Time: {running_time:.2f} seconds")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

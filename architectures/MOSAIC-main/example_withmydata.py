@@ -1,6 +1,9 @@
 import json
 from mosaic import Mosaic
 from sklearn.metrics import precision_score, recall_score, f1_score
+import time
+
+start_time = time.time()
 
 threshold = 0
 
@@ -81,6 +84,12 @@ generated_file_path = './datasets/gen-micro_retracted-fake_papers_train_part_pub
 output_file_path = './results/Mosaic/gpt2_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
 precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path)
+
+end_time = time.time()
+
+running_time = end_time - start_time
+
 print(f"Precision: {precision}")
 print(f"Recall: {recall}")
 print(f"F1 Score: {f1}")
+print(f"Running Time: {running_time:.2f} seconds")

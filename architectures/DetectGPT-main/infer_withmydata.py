@@ -4,7 +4,11 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 
 from model import GPT2PPLV2 as GPT2PPL
 
+import time
+
 model = GPT2PPL()
+
+start_time = time.time()
 
 def load_json_file(file_path):
     with open(file_path, 'r') as file:
@@ -94,6 +98,9 @@ output_metrics_path = './results/DetectGPT/kaggle_evaluation_metrics.json'
 
 precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_predictions_path, output_metrics_path)
 
+end_time = time.time()
+
 print(f"Precision: {precision}")
 print(f"Recall: {recall}")
 print(f"F1 Score: {f1}")
+running_time = end_time - start_time

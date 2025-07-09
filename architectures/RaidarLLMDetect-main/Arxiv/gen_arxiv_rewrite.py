@@ -1,8 +1,11 @@
 import os
 import openai
 import json
+import time
 
 import yaml 
+
+start_time = time.time()
 
 with open('./config.yaml', 'r') as file:
     config = yaml.safe_load(file)
@@ -78,3 +81,9 @@ def rewrite_json(input_json, prompt_list, human=False, output_filename='Raidar_o
 human_rewrite = rewrite_json(human, prompt_list, True, './results/Raidar/rewrite_arxiv_human_inv.json')
 
 GPT_rewrite = rewrite_json(GPT, prompt_list, False, './results/Raidar/rewrite_arxiv_GPT_inv.json')
+
+end_time = time.time()
+
+running_time = end_time - start_time
+
+print(f"Running Time: {running_time:.2f} seconds")
