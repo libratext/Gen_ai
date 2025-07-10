@@ -4,6 +4,14 @@ import torch
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch.nn.functional as F
+import os
+import yaml 
+
+with open('./config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
+
+hugging_face_token = config['api_keys']['hugging_face']
+os.environ["HF_TOKEN"] = hugging_face_token
 
 torch.set_grad_enabled(False)
 
@@ -63,8 +71,8 @@ class Mosaic(object):
             model = AutoModelForCausalLM.from_pretrained(model_name_or_path,
                                                          device_map="auto",
                                                          trust_remote_code=True,
-                                                         torch_dtype=torch.bfloat16 if use_bfloat16
-                                                         else torch.float32
+                                                         torch_dtype=torch.bfloat16 if use_bfloat16 else torch.float32,
+                                                         token=os.environ.get("HF_TOKEN")
                                                          )
             model.eval()  # Set the model to evaluation mode
             self.models.append(model)
@@ -79,7 +87,7 @@ class Mosaic(object):
 
         self.one_model_mode = one_model_mode
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_paths[-1])
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_paths[-1], token=os.environ.get("HF_TOKEN"))
         if not self.tokenizer.pad_token:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 

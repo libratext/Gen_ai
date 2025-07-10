@@ -11,8 +11,9 @@ threshold = 0
 with open('./config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
-#model_list = ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1", "Llama-2-7b-chat-hf", "Llama-2-7b-hf"]
 model_list = ["openai-community/gpt2-medium", "openai-community/gpt2"]
+#model_list = ["meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-7b-hf"] # Make sure your Hugging Face token key is in ./config.yaml
+#model_list = ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] # Bigger model
 
 mosaic = Mosaic(model_list)
 
@@ -85,7 +86,7 @@ def evaluate_model(human_file_path, generated_file_path, output_file_path):
 
 human_file_path = config['datasets']['default_hum']
 generated_file_path = config['datasets']['default_gen']
-output_file_path = './results/Mosaic/gpt2_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
+output_file_path = './results/Mosaic/TowerBase_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
 precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path)
 
