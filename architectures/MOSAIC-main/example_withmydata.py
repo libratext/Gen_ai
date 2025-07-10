@@ -3,6 +3,7 @@ from mosaic import Mosaic
 from sklearn.metrics import precision_score, recall_score, f1_score
 import time
 import yaml
+import argparse
 
 start_time = time.time()
 
@@ -15,6 +16,12 @@ model_list = ["openai-community/gpt2-medium", "openai-community/gpt2"]
 #model_list = ["meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-7b-hf"] # Make sure your Hugging Face token key is in ./config.yaml
 #model_list = ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] # Bigger model
 
+MODEL_SETS = {
+    "gpt2": ["openai-community/gpt2-medium", "openai-community/gpt2"],
+    "llama": ["meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-7b-hf"], # Make sure your Hugging Face token key is in ./config.yaml and you have acces to meta-llama/Llama-2-7b-hf
+    "tower": ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] # Bigger model
+}
+
 mosaic = Mosaic(model_list)
 
 def load_json_file(file_path):
@@ -25,7 +32,7 @@ def save_predictions_to_file(data, file_path):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
-def evaluate_model(human_file_path, generated_file_path, output_file_path):
+def evaluate_model(human_file_path, generated_file_path, output_file_path, mosaic):
     human_data = load_json_file(human_file_path)
     generated_data = load_json_file(generated_file_path)
 
@@ -84,17 +91,33 @@ def evaluate_model(human_file_path, generated_file_path, output_file_path):
 
     return precision, recall, f1
 
-human_file_path = config['datasets']['default_hum']
-generated_file_path = config['datasets']['default_gen']
-output_file_path = './results/Mosaic/TowerBase_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
+def main():
+    parser = argparse.ArgumentParser(description="Evaluate models using different model sets.")
+    parser.add_argument("--model_set", type=str, choices=MODEL_SETS.keys(), help="The model set to use.", default="gpt2")
+    args = parser.parse_args()
 
-precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path)
+    start_time = time.time()
+    threshold = 0
 
-end_time = time.time()
+    with open('./config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
 
-running_time = end_time - start_time
+    model_list = MODEL_SETS[args.model_set]
+    mosaic = Mosaic(model_list)
 
-print(f"Precision: {precision}")
-print(f"Recall: {recall}")
-print(f"F1 Score: {f1}")
-print(f"Running Time: {running_time:.2f} seconds")
+    human_file_path = config['datasets']['default_hum']
+    generated_file_path = config['datasets']['default_gen']
+    output_file_path = './results/Mosaic/test_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
+
+    precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path, mosaic)
+
+    end_time = time.time()
+    running_time = end_time - start_time
+
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1 Score: {f1}")
+    print(f"Running Time: {running_time:.2f} seconds")
+
+if __name__ == "__main__":
+    main()

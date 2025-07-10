@@ -44,11 +44,22 @@ You should get a json file with all the predictions in ```./results/fast-DetectG
 
 ### Mosaic Usage
 
-To use Mosaic architecture, use this command :
+To use Mosaic architecture with the gpt2 models, use this command :
 ```
-python ./architectures/MOSAIC-main/example_withmydata.py
+python ./architectures/MOSAIC-main/example_withmydata.py --model_set gpt2
 ```
 You should get a json file with all the predictions in ```./results/Mosaic```
+
+You can use other models like "llama": ["meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-7b-hf"] with this command:
+```
+python ./architectures/MOSAIC-main/example_withmydata.py --model_set llama
+```
+Make sure you have access to those models with you Hugging face account and enter your token key in ```./config.yaml```
+
+You can also use bigger models "tower": ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] using this command:
+```
+python ./architectures/MOSAIC-main/example_withmydata.py --model_set tower
+```
 
 ## Use the different architectures on your own dataset
 
