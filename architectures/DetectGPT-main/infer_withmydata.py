@@ -5,10 +5,14 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 from model import GPT2PPLV2 as GPT2PPL
 
 import time
+import yaml
+
+start_time = time.time()
 
 model = GPT2PPL()
 
-start_time = time.time()
+with open('./config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
 
 def load_json_file(file_path):
     with open(file_path, 'r') as file:
@@ -91,8 +95,8 @@ def evaluate_model(human_file_path, generated_file_path, output_predictions_path
 
     return precision, recall, f1
 
-human_file_path = './datasets/human-micpro_original-fake_papers_train_part_public_extended.json'
-generated_file_path = './datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json'
+human_file_path = config['datasets']['default_hum']
+generated_file_path = config['datasets']['default_gen']
 output_predictions_path = './results/DetectGPT/kaggle_predictions_output.json'
 output_metrics_path = './results/DetectGPT/kaggle_evaluation_metrics.json'
 

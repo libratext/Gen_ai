@@ -49,10 +49,13 @@ prompt_list = ['Revise this with your best effort', 'Help me polish this', 'Rewr
                 'Make this fluent while doing minimal change', 'Refine this for me please', 'Concise this for me and keep all the information',
                 'Improve this in GPT way']
 
-with open(f'./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json', 'r') as file:
+human_file_path = config['datasets']['default_hum']
+generated_file_path = config['datasets']['default_gen']
+
+with open(human_file_path, 'r') as file:
     human = json.load(file)
 
-with open(f'./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json', 'r') as file:
+with open(generated_file_path, 'r') as file:
     GPT = json.load(file)
 
 

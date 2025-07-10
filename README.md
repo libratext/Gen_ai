@@ -49,3 +49,6 @@ To use Mosaic architecture, use this command :
 python ./architectures/MOSAIC-main/example_withmydata.py
 ```
 You should get a json file with all the predictions in ```./results/Mosaic```
+
+## Use the different architectures on your own dataset
+

@@ -2,10 +2,14 @@ import json
 from mosaic import Mosaic
 from sklearn.metrics import precision_score, recall_score, f1_score
 import time
+import yaml
 
 start_time = time.time()
 
 threshold = 0
+
+with open('./config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
 
 #model_list = ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1", "Llama-2-7b-chat-hf", "Llama-2-7b-hf"]
 model_list = ["openai-community/gpt2-medium", "openai-community/gpt2"]
@@ -79,8 +83,8 @@ def evaluate_model(human_file_path, generated_file_path, output_file_path):
 
     return precision, recall, f1
 
-human_file_path = './datasets/human-micpro_original-fake_papers_train_part_public_extended.json'
-generated_file_path = './datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json'
+human_file_path = config['datasets']['default_hum']
+generated_file_path = config['datasets']['default_gen']
 output_file_path = './results/Mosaic/gpt2_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
 precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path)
