@@ -128,7 +128,7 @@ def main():
 
     human_file_path = config['datasets']['default_hum']
     generated_file_path = config['datasets']['default_gen']
-    output_file_path = './results/Mosaic/test_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
+    output_file_path = './results/Mosaic/'+str(model_list)+'gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
     precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path, mosaic)
 
