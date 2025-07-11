@@ -126,8 +126,18 @@ def main():
     model_list = MODEL_SETS[args.model_set]
     mosaic = Mosaic(model_list)
 
-    human_file_path = config['datasets']['default_hum']
-    generated_file_path = config['datasets']['default_gen']
+    human_file_path = (
+        config['datasets']['your-dataset_hum']
+        if config['datasets']['your-dataset_hum'] != "the_path_to_your_hum_dataset"
+        else config['datasets']['default_hum']
+    )
+
+    generated_file_path = (
+        config['datasets']['your-dataset_gen']
+        if config['datasets']['your-dataset_gen'] != "the_path_to_your_gen_dataset"
+        else config['datasets']['default_gen']
+    )
+
     output_file_path = './results/Mosaic/'+str(model_list)+'gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
     precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path, mosaic)

@@ -95,8 +95,18 @@ def evaluate_model(human_file_path, generated_file_path, output_predictions_path
 
     return precision, recall, f1
 
-human_file_path = config['datasets']['default_hum']
-generated_file_path = config['datasets']['default_gen']
+human_file_path = (
+        config['datasets']['your-dataset_hum']
+        if config['datasets']['your-dataset_hum'] != "the_path_to_your_hum_dataset"
+        else config['datasets']['default_hum']
+    )
+
+generated_file_path = (
+        config['datasets']['your-dataset_gen']
+        if config['datasets']['your-dataset_gen'] != "the_path_to_your_gen_dataset"
+        else config['datasets']['default_gen']
+    )
+
 output_predictions_path = './results/DetectGPT/kaggle_predictions_output.json'
 output_metrics_path = './results/DetectGPT/kaggle_evaluation_metrics.json'
 

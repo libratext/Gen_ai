@@ -49,8 +49,17 @@ prompt_list = ['Revise this with your best effort', 'Help me polish this', 'Rewr
                 'Make this fluent while doing minimal change', 'Refine this for me please', 'Concise this for me and keep all the information',
                 'Improve this in GPT way']
 
-human_file_path = config['datasets']['default_hum']
-generated_file_path = config['datasets']['default_gen']
+human_file_path = (
+        config['datasets']['your-dataset_hum']
+        if config['datasets']['your-dataset_hum'] != "the_path_to_your_hum_dataset"
+        else config['datasets']['default_hum']
+    )
+
+generated_file_path = (
+        config['datasets']['your-dataset_gen']
+        if config['datasets']['your-dataset_gen'] != "the_path_to_your_gen_dataset"
+        else config['datasets']['default_gen']
+    )
 
 with open(human_file_path, 'r') as file:
     human = json.load(file)

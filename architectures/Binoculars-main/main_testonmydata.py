@@ -74,8 +74,18 @@ def evaluate_model(human_file_path, ai_file_path, output_file_path):
 
     return precision, recall, f1
 
-human_file_path = config['datasets']['default_hum']
-ai_file_path = config['datasets']['default_gen']
+human_file_path = (
+        config['datasets']['your-dataset_hum']
+        if config['datasets']['your-dataset_hum'] != "the_path_to_your_hum_dataset"
+        else config['datasets']['default_hum']
+    )
+
+ai_file_path = (
+        config['datasets']['your-dataset_gen']
+        if config['datasets']['your-dataset_gen'] != "the_path_to_your_gen_dataset"
+        else config['datasets']['default_gen']
+    )
+
 output_file_path = './results/Binoculars/falcon-rw-1b_Binoculars_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
 precision, recall, f1 = evaluate_model(human_file_path, ai_file_path, output_file_path)
