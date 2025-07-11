@@ -19,7 +19,7 @@ with open('./config.yaml', 'r') as file:
 MODEL_SETS = {
     "gpt2": ["openai-community/gpt2-medium", "openai-community/gpt2"],
     "llama": ["meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-7b-hf"], # Make sure your Hugging Face token key is in ./config.yaml and you have acces to meta-llama/Llama-2-7b-hf
-    "tower": ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] # Bigger model
+    "tower": ["Unbabel/TowerBase-13B-v0.1", "Unbabel/TowerBase-7B-v0.1"] # Bigger model
 }
 
 #mosaic = Mosaic(model_list)
