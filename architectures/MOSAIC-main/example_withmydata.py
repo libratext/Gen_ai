@@ -12,7 +12,7 @@ threshold = 0
 with open('./config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
-model_list = ["openai-community/gpt2-medium", "openai-community/gpt2"]
+#model_list = ["openai-community/gpt2-medium", "openai-community/gpt2"]
 #model_list = ["meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-7b-hf"] # Make sure your Hugging Face token key is in ./config.yaml
 #model_list = ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] # Bigger model
 
@@ -22,7 +22,7 @@ MODEL_SETS = {
     "tower": ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] # Bigger model
 }
 
-mosaic = Mosaic(model_list)
+#mosaic = Mosaic(model_list)
 
 def load_json_file(file_path):
     with open(file_path, 'r') as file:
@@ -40,35 +40,55 @@ def evaluate_model(human_file_path, generated_file_path, output_file_path, mosai
     y_pred = []
     predictions = []
 
+    # Open the output file in write mode to start fresh
+    with open(output_file_path, 'w') as file:
+        json.dump({"predictions": []}, file, indent=4)
+
     for entry in human_data:
         text = entry["abs"]
         score = mosaic.compute_end_score(text)
         prediction = 0 if score >= threshold else 1
-
         y_true.append(0)  # 0 for human
         y_pred.append(prediction)
 
-        predictions.append({
+        prediction_entry = {
             "abs": text,
             "score": score,
             "prediction": "Generated" if prediction == 1 else "Not Generated",
             "source": "Human"
-        })
+        }
+
+        predictions.append(prediction_entry)
+
+        # Append the new prediction to the output file
+        with open(output_file_path, 'r+') as file:
+            data = json.load(file)
+            data["predictions"].append(prediction_entry)
+            file.seek(0)
+            json.dump(data, file, indent=4)
 
     for entry in generated_data:
         text = entry["abs"]
         score = mosaic.compute_end_score(text)
         prediction = 0 if score >= threshold else 1
-
         y_true.append(1)  # 1 for generated
         y_pred.append(prediction)
 
-        predictions.append({
+        prediction_entry = {
             "abs": text,
             "score": score,
             "prediction": "Generated" if prediction == 1 else "Not Generated",
             "source": "Generated"
-        })
+        }
+
+        predictions.append(prediction_entry)
+
+        # Append the new prediction to the output file
+        with open(output_file_path, 'r+') as file:
+            data = json.load(file)
+            data["predictions"].append(prediction_entry)
+            file.seek(0)
+            json.dump(data, file, indent=4)
 
     precision = precision_score(y_true, y_pred)
     recall = recall_score(y_true, y_pred)
@@ -87,6 +107,7 @@ def evaluate_model(human_file_path, generated_file_path, output_file_path, mosai
         "predictions": predictions
     }
 
+    # Save the complete output data at the end
     save_predictions_to_file(output_data, output_file_path)
 
     return precision, recall, f1
