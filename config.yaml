@@ -5,5 +5,5 @@ api_keys:
 datasets:
   default_gen: "./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json"
   default_hum: "./datasets/human-micpro_original-fake_papers_train_part_public_extended.json"
-  your-dataset_gen : "the_path_to_your_gen_dataset"
-  your-dataset_hum : "the_path_to_your_hum_dataset"
+  your-dataset_gen : "the_path_to_your_gen_dataset" # Default string : the_path_to_your_gen_dataset
+  your-dataset_hum : "the_path_to_your_hum_dataset" # Default string : the_path_to_your_hum_dataset
