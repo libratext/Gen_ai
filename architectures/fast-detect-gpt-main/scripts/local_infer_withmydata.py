@@ -90,7 +90,8 @@ def run(args, human_file_path, generated_file_path, output_file_path):
             'text': text,
             'title': entry['title'],
             'prediction': 'human' if prob < 0.5 else 'generated',
-            'probability': prob
+            'probability': prob,
+            "source": "Human"
         }
         predictions.append(prediction)
 
@@ -107,7 +108,8 @@ def run(args, human_file_path, generated_file_path, output_file_path):
             'text': text,
             'title': entry['title'],
             'prediction': 'human' if prob < 0.5 else 'generated',
-            'probability': prob
+            'probability': prob,
+            "source": "Generated"
         }
         predictions.append(prediction)
 
