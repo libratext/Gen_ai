@@ -30,7 +30,8 @@ def evaluate_model(human_file_path, ai_file_path, output_file_path, bino):
         y_pred.append(prediction_label)
         human_predictions.append({
             "abs": text,
-            "prediction": prediction
+            "prediction": prediction,
+            "source": "Human"
         })
 
     for entry in ai_data:
@@ -41,7 +42,8 @@ def evaluate_model(human_file_path, ai_file_path, output_file_path, bino):
         y_pred.append(prediction_label)
         ai_predictions.append({
             "abs": text,
-            "prediction": prediction
+            "prediction": prediction,
+            "source": "Generated"
         })
 
     save_predictions_to_file({
