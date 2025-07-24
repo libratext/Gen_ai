@@ -4,19 +4,7 @@ import torch
 from sklearn.metrics import precision_score, recall_score, f1_score
 import time
 import yaml
-
-start_time = time.time()
-
-with open('./config.yaml', 'r') as file:
-    config = yaml.safe_load(file)
-
-torch.cuda.empty_cache()
-torch.cuda.memory_summary(device=None, abbreviated=False)
-
-bino = Binoculars(
-    observer_name_or_path="tiiuae/falcon-rw-1b", #tiiuae/falcon-7b bigger model
-    performer_name_or_path="tiiuae/falcon-rw-1b" #tiiuae/falcon-7b-instruct bigger model
-)
+import argparse
 
 def load_json_file(file_path):
     with open(file_path, 'r') as file:
@@ -26,13 +14,11 @@ def save_predictions_to_file(data, file_path):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
-def evaluate_model(human_file_path, ai_file_path, output_file_path):
+def evaluate_model(human_file_path, ai_file_path, output_file_path, bino):
     human_data = load_json_file(human_file_path)
     ai_data = load_json_file(ai_file_path)
-
     y_true = []
     y_pred = []
-
     human_predictions = []
     ai_predictions = []
 
@@ -40,10 +26,8 @@ def evaluate_model(human_file_path, ai_file_path, output_file_path):
         text = entry["abs"]
         prediction = bino.predict(text)
         prediction_label = 0 if prediction == "Most likely Human-Written" else 1
-
         y_true.append(0)  # 0 for human
         y_pred.append(prediction_label)
-
         human_predictions.append({
             "abs": text,
             "prediction": prediction
@@ -53,10 +37,8 @@ def evaluate_model(human_file_path, ai_file_path, output_file_path):
         text = entry["abs"]
         prediction = bino.predict(text)
         prediction_label = 0 if prediction == "Most likely Human-Written" else 1
-
         y_true.append(1)  # 1 for AI
         y_pred.append(prediction_label)
-
         ai_predictions.append({
             "abs": text,
             "prediction": prediction
@@ -74,27 +56,56 @@ def evaluate_model(human_file_path, ai_file_path, output_file_path):
 
     return precision, recall, f1
 
-human_file_path = (
+def main():
+    parser = argparse.ArgumentParser(description='Evaluate model with specified size.')
+    parser.add_argument('--model', type=str, required=True, choices=['small', 'big'], help='Specify the model size: small or big')
+    args = parser.parse_args()
+
+    start_time = time.time()
+
+    with open('./config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+
+    torch.cuda.empty_cache()
+    torch.cuda.memory_summary(device=None, abbreviated=False)
+
+    if args.model == 'small':
+        model_size = 'small'
+        bino = Binoculars(
+            observer_name_or_path="tiiuae/falcon-rw-1b",
+            performer_name_or_path="tiiuae/falcon-rw-1b"
+        )
+        
+    if args.model == 'big':
+        model_size = 'big'
+        bino = Binoculars(
+            observer_name_or_path="tiiuae/falcon-7b",
+            performer_name_or_path="tiiuae/falcon-7b-instruct"
+        )
+
+    human_file_path = (
         config['datasets']['your-dataset_hum']
         if config['datasets']['your-dataset_hum'] != "the_path_to_your_hum_dataset"
         else config['datasets']['default_hum']
     )
 
-ai_file_path = (
+    ai_file_path = (
         config['datasets']['your-dataset_gen']
         if config['datasets']['your-dataset_gen'] != "the_path_to_your_gen_dataset"
         else config['datasets']['default_gen']
     )
 
-output_file_path = './results/Binoculars/falcon-rw-1b_Binoculars_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
+    output_file_path = f'./results/Binoculars/falcon-{args.model}_Binoculars_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
 
-precision, recall, f1 = evaluate_model(human_file_path, ai_file_path, output_file_path)
+    precision, recall, f1 = evaluate_model(human_file_path, ai_file_path, output_file_path, bino)
 
-end_time = time.time()
+    end_time = time.time()
+    running_time = end_time - start_time
 
-running_time = end_time - start_time
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1 Score: {f1}")
+    print(f"Running Time: {running_time:.2f} seconds")
 
-print(f"Precision: {precision}")
-print(f"Recall: {recall}")
-print(f"F1 Score: {f1}")
-print(f"Running Time: {running_time:.2f} seconds")
+if __name__ == "__main__":
+    main()

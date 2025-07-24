@@ -23,11 +23,16 @@ python ./architectures/RaidarLLMDetect-main/Arxiv/detect_arxiv_inv.py
 ```
 
 ### Binoculars Usage
-To use Binoculars architecture, use this command :
+To use Binoculars architecture with a smaller model (tiiuae/falcon-rw-1b & tiiuae/falcon-rw-1b ), use this command :
 ```
-python ./architectures/Binoculars-main/main_testonmydata.py
+python ./architectures/Binoculars-main/main_testonmydata.py --model small
 ```
-You should get a json file with all the predictions in ```./results/Binoculars``` 
+to use a bigger model (tiiuae/falcon-7b & tiiuae/falcon-7b-instruct), use this command:
+```
+python ./architectures/Binoculars-main/main_testonmydata.py --model big
+```
+You should get a json file with all the predictions in ```./results/Binoculars```
+
 ### DetectGPT Usage
 To use DetectGPT architecture, use this command :
 ```
