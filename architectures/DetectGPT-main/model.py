@@ -261,6 +261,9 @@ class GPT2PPLV2:
                 prob = "{:.2f}%\n(Human)".format(normCdf(abs(self.threshold - score)) * 100)
                 probs.append(prob)
 
+        if not scores:
+            return {"prob": "0%", "label": -1}, "No valid scores computed."
+    
         mean_score = sum(scores)/len(scores)
 
         mean_prob = normCdf(abs(self.threshold - mean_score)) * 100
