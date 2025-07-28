@@ -43,15 +43,21 @@ You should get a json file with all the predictions in ```./results/DetectGPT```
 ### fast-DetectGPT Usage
 To use fast-DetectGPT architecture, use this command :
 ```
-python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py --human_file_path ./datasets/human-micpro_original-fake_papers_train_part_public_extended.json --generated_file_path ./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json --output_file_path ./results/fast-DetectGPT/gpt-j-6B_kaggle_fast-detectgpt.json
+python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py \
+--human_file_path ./datasets/human-micpro_original-fake_papers_train_part_public_extended.json \
+--generated_file_path ./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json \
+--output_file_path ./results/fast-DetectGPT/gpt-j-6B_kaggle_fast-detectgpt.json
 ```
 You should get a json file with all the predictions in ```./results/fast-DetectGPT```. By default, it uses a smaller model (gpt-j-6B and gpt-neo-2.7B).
 
 You can use this command to use a bigger model (falcon-7b & falcon-7b-instruct):
 ```
-python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py --sampling_model_name falcon-7b --scoring_model_name falcon-7b-instruct --human_file_path ./datasets/human-micpro_original-fake
-_papers_train_part_public_extended.json --generated_file_path ./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json --
-output_file_path ./results/fast-DetectGPT/falcon-7b_kaggle_fast-detectgpt.json
+python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py \
+--sampling_model_name falcon-7b \
+--scoring_model_name falcon-7b-instruct \
+--human_file_path ./datasets/human-micpro_original-fake_papers_train_part_public_extended.json \
+--generated_file_path ./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json \
+--output_file_path ./results/fast-DetectGPT/falcon-7b_kaggle_fast-detectgpt.json
 ```
 
 ### Mosaic Usage
