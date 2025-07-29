@@ -29,7 +29,8 @@ def map_prediction_to_label(prediction_text):
     elif "A.I." in prediction_text:
         return 1
     else:
-        raise ValueError(f"Unexpected prediction text: {prediction_text}")
+        print(f"Unexpected prediction text: {prediction_text}")
+        return -1
 
 def evaluate_model(human_file_path, generated_file_path, output_predictions_path, output_metrics_path):
     human_data = load_json_file(human_file_path)
