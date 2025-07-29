@@ -82,5 +82,3 @@ python ./architectures/MOSAIC-main/example_withmydata.py --model_set tower
 ## Use the different architectures on your own dataset
 
 As soon as you write your own dataset paths into the ```./config.yaml``` file, all the pipelines will priorise your dataset apart from fast-DetectGPT which has a parameter usage where you can point to your own dataset paths in the command line when calling the script. Make sure your own dataset has the exact same format as the default datasets from this repository in ```./datasets```.
-
-test
