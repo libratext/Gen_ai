@@ -5,6 +5,7 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 import time
 import yaml
 import argparse
+import os
 
 def load_json_file(file_path):
     with open(file_path, 'r') as file:
@@ -97,7 +98,7 @@ def main():
         else config['datasets']['default_gen']
     )
 
-    output_file_path = f'./results/Binoculars/falcon-{args.model}_Binoculars_gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
+    output_file_path = f'./results/Binoculars/falcon-{args.model}_Binoculars_{os.path.basename(ai_file_path)}.json'
 
     precision, recall, f1 = evaluate_model(human_file_path, ai_file_path, output_file_path, bino)
 
@@ -108,6 +109,7 @@ def main():
     print(f"Recall: {recall}")
     print(f"F1 Score: {f1}")
     print(f"Running Time: {running_time:.2f} seconds")
+    print(f"Model: {str(bino)}")
 
 if __name__ == "__main__":
     main()
