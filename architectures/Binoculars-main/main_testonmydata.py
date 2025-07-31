@@ -98,7 +98,7 @@ def main():
         else config['datasets']['default_gen']
     )
 
-    output_file_path = f'./results/Binoculars/falcon-{args.model}_Binoculars_{os.path.basename(ai_file_path)}.json'
+    output_file_path = f'./results/Binoculars/falcon-{args.model}_Binoculars_{os.path.basename(ai_file_path)}'
 
     precision, recall, f1 = evaluate_model(human_file_path, ai_file_path, output_file_path, bino)
 
