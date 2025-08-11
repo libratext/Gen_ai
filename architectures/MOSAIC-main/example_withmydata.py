@@ -4,6 +4,7 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 import time
 import yaml
 import argparse
+import os
 
 start_time = time.time()
 
@@ -138,7 +139,7 @@ def main():
         else config['datasets']['default_gen']
     )
 
-    output_file_path = './results/Mosaic/'+str(model_list)+'gen_human-micro_retracted-fake_papers_train_part_public_extended.json'
+    output_file_path = f'./results/Mosaic/{args.model_set}_{os.path.basename(generated_file_path)}'
 
     precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_file_path, mosaic)
 
