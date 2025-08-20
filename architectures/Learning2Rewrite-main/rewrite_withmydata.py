@@ -9,15 +9,10 @@ from transformers import (
     AutoModelForCausalLM,
     BitsAndBytesConfig,
 )
+from huggingface_hub import login
 
-with open('./config.yaml', 'r') as file:
-    config = yaml.safe_load(file)
-
-hugging_face_token = config['api_keys']['hugging_face']
-os.environ["HF_TOKEN"] = hugging_face_token
-
-def load_model_and_tokenizer(model_name="meta-llama/Meta-Llama-3-8B-Instruct"):
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+def load_model_and_tokenizer(model_name="meta-llama/Meta-Llama-3-8B-Instruct", local_model_path=None):
+    tokenizer = AutoTokenizer.from_pretrained(local_model_path if local_model_path else model_name)
     tokenizer.pad_token = tokenizer.bos_token
     tokenizer.padding_side = "right"
 
@@ -32,7 +27,7 @@ def load_model_and_tokenizer(model_name="meta-llama/Meta-Llama-3-8B-Instruct"):
         model_name,
         quantization_config=bnb_config,
         low_cpu_mem_usage=True,
-        token=hugging_face_token  
+        token=os.getenv("HF_TOKEN")
     )
     return model, tokenizer
 
@@ -77,7 +72,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Refine abstracts using a language model.')
     parser.add_argument('--input', type=str, required=True, help='Path to the input JSON file.')
     parser.add_argument('--output', type=str, required=True, help='Path to the output JSON file.')
+    parser.add_argument('--local-model-path', type=str, default=None,
+                        help='Path to the local Llama-3-8B model. If not provided, the model will be downloaded from Hugging Face.')
     args = parser.parse_args()
 
-    model, tokenizer = load_model_and_tokenizer()
+    print(torch.cuda.is_available())
+    print(torch.cuda.get_device_name(0))
+
+    with open('./config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+    hugging_face_token = config['api_keys']['hugging_face']
+    os.environ["HF_TOKEN"] = hugging_face_token
+    
+    if not args.local_model_path:
+        login(token=hugging_face_token)
+
+    model, tokenizer = load_model_and_tokenizer(local_model_path=args.local_model_path)
     rewrite(args.input, args.output, model, tokenizer)
