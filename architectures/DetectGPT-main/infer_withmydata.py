@@ -112,8 +112,8 @@ generated_file_path = (
         else config['datasets']['default_gen']
     )
 
-output_predictions_path = './results/DetectGPT/'+os.path.basename(generated_file_path)+'_predictions_output.json'
-output_metrics_path = './results/DetectGPT/'+os.path.basename(generated_file_path)+'_evaluation_metrics.json'
+output_predictions_path = './results/DetectGPT/'+os.path.splitext(os.path.basename(generated_file_path))[0]+'_predictions_output.json'
+output_metrics_path = './results/DetectGPT/'+os.path.splitext(os.path.basename(generated_file_path))[0]+'_evaluation_metrics.json'
 
 precision, recall, f1 = evaluate_model(human_file_path, generated_file_path, output_predictions_path, output_metrics_path)
 
