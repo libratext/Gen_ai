@@ -54,6 +54,7 @@ def evaluate_model(human_file_path, generated_file_path, output_file_path, mosai
 
         prediction_entry = {
             "abs": text,
+            'title': entry['title'],
             "score": score,
             "prediction": "Generated" if prediction == 1 else "Not Generated",
             "source": "Human"
