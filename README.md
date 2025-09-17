@@ -27,11 +27,16 @@ To use Binoculars architecture with a smaller model (tiiuae/falcon-rw-1b & tiiua
 ```
 python ./architectures/Binoculars-main/main_testonmydata.py --model small
 ```
-to use a bigger model (tiiuae/falcon-7b & tiiuae/falcon-7b-instruct), use this command :
+To use a bigger model (tiiuae/falcon-7b & tiiuae/falcon-7b-instruct), use this command :
 ```
 python ./architectures/Binoculars-main/main_testonmydata.py --model big
 ```
 You should get a json file with all the predictions in ```./results/Binoculars```
+
+You can also use Binoculars only on a specific text. Make sure the text is not too small or too big. You can use a smaller model (tiiuae/falcon-rw-1b & tiiuae/falcon-rw-1b ) or a bigger model (tiiuae/falcon-7b & tiiuae/falcon-7b-instruct)
+```
+python ./architectures/Binoculars-main/predict_binoculars.py --input_text "This is a test." --model small
+```
 
 ### DetectGPT Usage
 To use DetectGPT architecture, use this command :
@@ -39,6 +44,11 @@ To use DetectGPT architecture, use this command :
 python ./architectures/DetectGPT-main/infer_withmydata.py
 ```
 You should get a json file with all the predictions in ```./results/DetectGPT``` 
+
+You can also use DetectGPT only on a specific text. Make sure the text is not too small or too big.
+```
+python ./architectures/DetectGPT-main/predict_detectGPT.py --input_text "This is a test."
+```
 
 ### fast-DetectGPT Usage
 To use fast-DetectGPT architecture, use this command :
@@ -59,6 +69,10 @@ python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py \
 --generated_file_path ./datasets/gen-micro_retracted-fake_papers_train_part_public_extended.json \
 --output_file_path ./results/fast-DetectGPT/falcon-7b_kaggle_fast-detectgpt.json
 ```
+You can also use fast-DetectGPT only on a specific text. Make sure the text is not too small or too big. You can use specific sampling ("gpt-j-6B"/"gpt-neo-2.7B"/"falcon-7b") and scoring models ("gpt-neo-2.7B"/"falcon-7b-instruct").
+```
+python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py --input_text "This is a test."
+```
 
 ### Mosaic Usage
 
@@ -77,6 +91,15 @@ Make sure you have access to those models with you Hugging face account and ente
 You can also use bigger models "tower": ["Unbabel/TowerBase-13B-v0.1", "TowerBase-7B-v0.1"] using this command :
 ```
 python ./architectures/MOSAIC-main/example_withmydata.py --model_set tower
+```
+You can also use Mosaic only on a specific text. Make sure the text is not too small or too big. You can use specific models using this list:
+```
+"gpt2": ["openai-community/gpt2-medium", "openai-community/gpt2"],
+"llama": ["meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-7b-hf"],  # Ensure Hugging Face token is set inside the config.yaml file
+"tower": ["Unbabel/TowerBase-13B-v0.1", "Unbabel/TowerBase-7B-v0.1"]
+```
+```
+python ./architectures/DetectGPT-main/predict_detectGPT.py --input_text "This is a test." --model gpt2
 ```
 
 ## Use the different architectures on your own dataset

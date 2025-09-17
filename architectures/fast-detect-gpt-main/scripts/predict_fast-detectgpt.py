@@ -95,8 +95,8 @@ def predict_text(text, sampling_model_name="gpt-j-6B", scoring_model_name="gpt-n
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_text', type=str, required=True, help='Add your text or document to be predicted as generated or human-written')
-    parser.add_argument('--sampling_model_name', type=str, default="gpt-j-6B", required=False,help="")
-    parser.add_argument('--scoring_model_name', type=str, default="gpt-neo-2.7B",required=False,help="")
+    parser.add_argument('--sampling_model_name', type=str, default="gpt-j-6B", required=False,help="Use specific sampling models ['gpt-j-6B'/'gpt-neo-2.7B'/'falcon-7b']")
+    parser.add_argument('--scoring_model_name', type=str, default="gpt-neo-2.7B",required=False,help="Use specific scoring models ['gpt-neo-2.7B'/'falcon-7b-instruct']")
     parser.add_argument('--device', type=str, default="cpu",required=False)
     parser.add_argument('--cache_dir', type=str, default="../cache",required=False)
 
