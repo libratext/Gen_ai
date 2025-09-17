@@ -35,7 +35,9 @@ You should get a json file with all the predictions in ```./results/Binoculars``
 
 You can also use Binoculars only on a specific text. Make sure the text is not too small or too big. You can use a smaller model (tiiuae/falcon-rw-1b & tiiuae/falcon-rw-1b ) or a bigger model (tiiuae/falcon-7b & tiiuae/falcon-7b-instruct)
 ```
-python ./architectures/Binoculars-main/predict_binoculars.py --input_text "This is a test." --model small
+python ./architectures/Binoculars-main/predict_binoculars.py \
+--input_text "This is a test." \
+--model small
 ```
 
 ### DetectGPT Usage
@@ -47,7 +49,8 @@ You should get a json file with all the predictions in ```./results/DetectGPT```
 
 You can also use DetectGPT only on a specific text. Make sure the text is not too small or too big.
 ```
-python ./architectures/DetectGPT-main/predict_detectGPT.py --input_text "This is a test."
+python ./architectures/DetectGPT-main/predict_detectGPT.py \
+--input_text "This is a test."
 ```
 
 ### fast-DetectGPT Usage
@@ -71,7 +74,8 @@ python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py \
 ```
 You can also use fast-DetectGPT only on a specific text. Make sure the text is not too small or too big. You can use specific sampling ("gpt-j-6B"/"gpt-neo-2.7B"/"falcon-7b") and scoring models ("gpt-neo-2.7B"/"falcon-7b-instruct").
 ```
-python ./architectures/fast-detect-gpt-main/scripts/local_infer_withmydata.py --input_text "This is a test."
+python ./architectures/fast-detect-gpt-main/scripts/predict_fast-detectgpt.py \
+--input_text "This is a test."
 ```
 
 ### Mosaic Usage
@@ -99,7 +103,9 @@ You can also use Mosaic only on a specific text. Make sure the text is not too s
 "tower": ["Unbabel/TowerBase-13B-v0.1", "Unbabel/TowerBase-7B-v0.1"]
 ```
 ```
-python ./architectures/DetectGPT-main/predict_detectGPT.py --input_text "This is a test." --model gpt2
+python ./architectures/DetectGPT-main/predict_detectGPT.py \
+--input_text "This is a test." \
+--model gpt2
 ```
 
 ## Use the different architectures on your own dataset
