@@ -21,6 +21,11 @@ And then, you apply the detection :
 ```
 python ./architectures/RaidarLLMDetect-main/Arxiv/detect_arxiv_inv.py
 ```
+You can also use Raidar only on a specific text. Make sure the text is not too small or too big. Make sure you add ```./architectures/RaidarLLMDetect-main/Arxiv/ada_rewrite_arxiv_GPT_inv.json``` and ```./architectures/RaidarLLMDetect-main/Arxiv/ada_rewrite_arxiv_human_inv.json``` to the ```config.yaml``` file for Raidar model training.
+
+```
+python ./architectures/RaidarLLMDetect-main/Arxiv/predict_raidar.py --input_text "This is a test."
+```
 
 ### Binoculars Usage
 To use Binoculars architecture with a smaller model (tiiuae/falcon-rw-1b & tiiuae/falcon-rw-1b ), use this command :
@@ -103,7 +108,7 @@ You can also use Mosaic only on a specific text. Make sure the text is not too s
 "tower": ["Unbabel/TowerBase-13B-v0.1", "Unbabel/TowerBase-7B-v0.1"]
 ```
 ```
-python ./architectures/DetectGPT-main/predict_detectGPT.py \
+python ./architectures/MOSAIC-main/predict_mosaic.py \
 --input_text "This is a test." \
 --model gpt2
 ```
