@@ -201,8 +201,8 @@ def main():
     args = parser.parse_args()
 
     # Load datasets
-    human_file_path = config['datasets']['your-dataset_hum'] if config['datasets']['your-dataset_hum'] != "the_path_to_your_hum_dataset" else config['datasets']['default_hum']
-    generated_file_path = config['datasets']['your-dataset_gen'] if config['datasets']['your-dataset_gen'] != "the_path_to_your_gen_dataset" else config['datasets']['default_gen']
+    human_file_path = "./architectures/RaidarLLMDetect-main/Arxiv/ada_rewrite_arxiv_human_inv.json"
+    generated_file_path = "./architectures/RaidarLLMDetect-main/Arxiv/ada_rewrite_arxiv_GPT_inv.json"
 
     with open(human_file_path, 'r') as file:
         human = json.load(file)
