@@ -53,7 +53,7 @@ def evaluate_model(human_file_path, generated_file_path, output_predictions_path
 
         prediction_data = {
             "content": sentence,
-            'title': entry['title'],
+            "title": entry['title'],
             "prediction": label,
             "probability": prediction[0],
             "source": human_file_path
@@ -69,6 +69,7 @@ def evaluate_model(human_file_path, generated_file_path, output_predictions_path
 
         prediction_data = {
             "content": sentence,
+            "title": entry['title'],
             "prediction": label,
             "probability": prediction[0],
             "source": generated_file_path
