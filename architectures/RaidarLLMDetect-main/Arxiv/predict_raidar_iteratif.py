@@ -193,10 +193,9 @@ def save_predictions_to_file(data, file_path):
 # Predict if the text is human-written or generated
 def predict_text(human_file_path, generated_file_path, model, output_file_path):
     start_time = time.time()
-
     human_data = load_json_file(human_file_path)
     generated_data = load_json_file(generated_file_path)
-    
+
     y_true = []
     y_pred = []
     predictions = []
@@ -207,7 +206,6 @@ def predict_text(human_file_path, generated_file_path, model, output_file_path):
     for entry in human_data:
         text = entry["abs"]
         y_true.append(0)
-
         rewritten_data = {prompt: GPT_self_prompt(prompt, text) for prompt in prompt_list}
         rewritten_data['input'] = text
         processed_data = get_data_stat([rewritten_data])
@@ -215,22 +213,27 @@ def predict_text(human_file_path, generated_file_path, model, output_file_path):
 
         if feature_vector.size > 0:
             prediction = model.predict(feature_vector)
-            prediction = "Generated" if prediction[0] == 1 else "Human-written"
-            #return "Generated" if prediction[0] == 1 else "Human-written"
+            if hasattr(model, "predict_proba"):
+                score = model.predict_proba(feature_vector)[0][1]
+            elif hasattr(model, "decision_function"):
+                score = model.decision_function(feature_vector)[0]
+            else:
+                score = 0.5  # Default if no scoring method is available
+
+            prediction_label = "Generated" if prediction[0] == 1 else "Not Generated"
         else:
-            prediction = "Unable to predict due to insufficient features."
-            #return "Unable to predict due to insufficient features."
-        
-        y_pred.append(prediction)
+            prediction_label = "Unable to predict due to insufficient features."
+            score = 0
+
+        y_pred.append(1 if prediction_label == "Generated" else 0)
 
         prediction_entry = {
-            "abs" : text,
+            "abs": text,
             "title": entry["title"],
-            "score": feature_vector.size,
-            "prediction" : "Generated" if prediction[0] == 1 else "Not Generated",
-            "source" : "Human"
+            "score": float(score),
+            "prediction": prediction_label,
+            "source": "Human"
         }
-
         predictions.append(prediction_entry)
 
         with open(output_file_path, 'r+') as file:
@@ -238,12 +241,10 @@ def predict_text(human_file_path, generated_file_path, model, output_file_path):
             data["predictions"].append(prediction_entry)
             file.seek(0)
             json.dump(data, file, indent=4)
-    
+
     for entry in generated_data:
         text = entry["abs"]
-        y_true.append(0)
-        y_pred.append(prediction)
-
+        y_true.append(1)
         rewritten_data = {prompt: GPT_self_prompt(prompt, text) for prompt in prompt_list}
         rewritten_data['input'] = text
         processed_data = get_data_stat([rewritten_data])
@@ -251,30 +252,36 @@ def predict_text(human_file_path, generated_file_path, model, output_file_path):
 
         if feature_vector.size > 0:
             prediction = model.predict(feature_vector)
-            #prediction = "Generated" if prediction[0] == 1 else "Human-written"
-            #return "Generated" if prediction[0] == 1 else "Human-written"
-        else:
-            prediction = "Unable to predict due to insufficient features."
-            #return "Unable to predict due to insufficient features."
-        
-        prediction_entry = {
-            "abs" : text,
-            "title": entry["title"],
-            "score": feature_vector.size,
-            "prediction" : "Generated" if prediction[0] == 1 else "Not Generated",
-            "source" : "Generated"
-        }
+            if hasattr(model, "predict_proba"):
+                score = model.predict_proba(feature_vector)[0][1]
+            elif hasattr(model, "decision_function"):
+                score = model.decision_function(feature_vector)[0]
+            else:
+                score = 0.5
 
+            prediction_label = "Generated" if prediction[0] == 1 else "Not Generated"
+        else:
+            prediction_label = "Unable to predict due to insufficient features."
+            score = 0
+
+        y_pred.append(1 if prediction_label == "Generated" else 0)
+
+        prediction_entry = {
+            "abs": text,
+            "title": entry["title"],
+            "score": float(score),
+            "prediction": prediction_label,
+            "source": "Generated"
+        }
         predictions.append(prediction_entry)
 
         with open(output_file_path, 'r+') as file:
             data = json.load(file)
             data["predictions"].append(prediction_entry)
-
             file.seek(0)
             json.dump(data, file, indent=4)
 
-        
+    # Calculate metrics
     precision = precision_score(y_true, y_pred)
     recall = recall_score(y_true, y_pred)
     f1 = f1_score(y_true, y_pred)
@@ -289,28 +296,28 @@ def predict_text(human_file_path, generated_file_path, model, output_file_path):
             "recall": recall,
             "f1_score": f1
         },
-        "predictions": predictions
+        "predictions": predictions,
+        "running_time": time.time() - start_time
     }
-    data["running_time"] = time.time() - start_time
-    running_time = time.time() - start_time
 
-    print(f"Running Time: {running_time:.2f} seconds")
+    with open(output_file_path, 'w') as file:
+        json.dump(output_data, file, indent=4)
 
-    save_predictions_to_file(output_data, output_file_path)
-
+    print(f"Running Time: {time.time() - start_time:.2f} seconds")
     return precision, recall, f1
 
 
 def main():
 
     parser = argparse.ArgumentParser(description="Predict if a text is human-written or generated.")
-    parser.add_argument("--input_folder", type=str, help="The input text to analyze.")
+    parser.add_argument("--train_human_file_path", type=str, help="Training human data")
+    parser.add_argument("--train_generated_file_path", type=str, help="Training human data")
     args = parser.parse_args()
 
     # Load datasets
-    train_human_file_path = "/home/breton/Dev/Gen_Article/Gen_ai_v2/Gen_ai/architectures/RaidarLLMDetect-main/Arxiv/ada_rewrite_arxiv_human_inv.json"
-    train_generated_file_path = "/home/breton/Dev/Gen_Article/Gen_ai_v2/Gen_ai/architectures/RaidarLLMDetect-main/Arxiv/ada_rewrite_arxiv_GPT_inv.json"
-
+    train_human_file_path = args.train_human_file_path
+    train_generated_file_path = args.train_generated_file_path
+    
     with open(train_human_file_path, 'r') as file:
         train_human = json.load(file)
 
@@ -336,10 +343,10 @@ def main():
         else config['datasets']['default_gen']
     )
 
-    output_file_path = f'./results/Raidar/iteration_test.json'
+    output_file_path = f'./Raidar_{os.path.basename(train_human_file_path)}_{os.path.basename(test_generated_file_path)}_predictions'
 
     prediction = predict_text(test_human_file_path, test_generated_file_path, model, output_file_path)
-    print(f"The input text : \n{args.input_text}\nis predicted to be: {prediction}")
+    #print(f"The input text : \n{args.input_text}\nis predicted to be: {prediction}")
 
 if __name__ == "__main__":
     main()
